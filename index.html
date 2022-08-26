@@ -4,9 +4,19 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Rock Paper Scissors</title>
 </head>
 <body>
+    <h1>Rock Paper Scissors!</h1>
+    <p>First to 5 points is the winner!</p>
+    <div class="buttonContainer">
+        <button class="rock">Rock!</button>
+        <button class="paper">Paper!</button>
+        <button class="scissors">Scissors!</button>
+    </div>
+
+    <div class="results"></div>
+
     <script>
         function computerPlay(){
             let choice = Math.floor(Math.random()*3);
@@ -43,19 +53,19 @@
                     return 'It is a draw!';
                 }
                 else{
-                    return 'You Lose! Scissors beats Paper!';
+                    return ('You Lose! Scissors beats Paper!');
                 }
             }
 
             else if(playerSelection.toLowerCase() == 'scissors'){
                 if(computerSelection == 'Rock'){
-                    return 'You Lose! Rock beats Scissors!';
+                    return ('You Lose! Rock beats Scissors!');
                 }
                 else if(computerSelection == 'Paper'){
-                    return 'You Win! Scissors beats Paper!';
+                    return ('You Win! Scissors beats Paper!');
                 }
                 else{
-                    return 'It is a draw!';
+                    return ('It is a draw!');
                 }
             }
         }
@@ -63,21 +73,83 @@
         function game(){
             let playerScore = 0;
             let computerScore = 0;
-            for(let i = 0; i < 5; i++){
-                let playerSelection = prompt("Choose Rock, Paper, or Scissors?")
-                let computerSelection = computerPlay();
-                let string = playRound(playerSelection, computerSelection);
-                if(string.includes('Win')){
-                    playerScore++;
-                }
-                else if(string.includes('Lose')){
-                    computerScore++;
-                }
-                console.log(string);
-                console.log(`Computer Score is ${computerScore}`);
-                console.log(`Player Score is ${playerScore}`);
-            }
+            const winner = "";
+
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach((button) => {
+                button.addEventListener('click', () => {
+                    let playerSelection = button.className;
+                    let computerSelection = computerPlay();
+                    let string = playRound(playerSelection, computerSelection);
+                    
+                    if(string.includes('Win')){
+                        playerScore++;
+                    }
+
+                    else if(string.includes('Lose')){
+                        computerScore++;
+                    }
+
+                    playerWins.textContent = 'Player Wins: ' + playerScore;
+                    computerWins.textContent = 'Computer Wins: ' + computerScore;
+                    roundWinner.textContent = string;
+                    endGame(playerScore,computerScore);
+                })
+            })
+        
         }
+        
+        function endGame(playerScore,computerScore){
+            if(playerScore == 5){
+                winner = 'YOU WIN!!';
+                gameWinner.textContent = winner;
+                gameWinner.style.color = 'blue';
+                playAgain();
+            }
+            else if(computerScore == 5){
+                winner = 'COMPUTER WINS!!';
+                gameWinner.textContent = winner;
+                gameWinner.style.color = 'red';
+                playAgain();
+            }
+
+        }
+
+        function playAgain(){
+            let allButtons = document.querySelectorAll('button');
+            allButtons.forEach((button) => {
+                button.disabled = true;
+            })
+
+            let playAgain = document.createElement('button');
+            playAgain.textContent = 'Play Again?';
+            resultsContainer.appendChild(playAgain);
+
+            playAgain.addEventListener('click', () => {
+                location.reload();
+            })
+        }
+
+        const resultsContainer = document.querySelector('.results');
+        
+        const playerWins = document.createElement('p');
+        playerWins.style.color = 'blue';
+        resultsContainer.appendChild(playerWins);
+
+        const computerWins = document.createElement('p');
+        computerWins.style.color = 'red';
+        resultsContainer.appendChild(computerWins);
+
+        const roundWinner = document.createElement('p');
+        roundWinner.style.color = 'teal';
+        resultsContainer.appendChild(roundWinner);
+
+        const gameWinner = document.createElement('p');
+        gameWinner.style.color = 'burgundy';
+        resultsContainer.appendChild(gameWinner);
+
+        game();
+
     </script>
 </body>
 </html>
